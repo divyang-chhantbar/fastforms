@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Forms {
+  id          String           @id @default(cuid())
+  userId      String
+  title       String
+  fields      Json
+  isPublished Boolean          @default(false)
+  slug        String           @unique @default(uuid())
+  createdAt   DateTime         @default(now())
+  responses   FormsResponses[]
+
+  @@index([userId])
+}
+
+model FormsResponses {
+  id        String   @id @default(cuid())
+  formId    String
+  form      Forms    @relation(fields: [formId], references: [id], onDelete: Cascade)
+  data      Json
+  createdAt DateTime @default(now())
+
+  @@index([formId])
+}
