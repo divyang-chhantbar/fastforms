@@ -8,13 +8,12 @@ import { NextRequest, NextResponse } from "next/server";
     return the response that are attached with that particular formId
 */
 
-export async function GET(req : NextRequest,{ params }: { params: Promise<{ formId: string }> }) {
+export async function GET(req : NextRequest,{ params }: { params: Promise<{ id: string }> }) {
   try {
-    const { formId } = await params;
-    console.log("FormId : ",formId);
-    
+    const {id} = await params;
+    // console.log("Received form ID:", id);
 
-    if (!formId || formId.trim().length === 0) {
+    if (!id || id.trim().length === 0) {
       return NextResponse.json(
         {
           error: "Form ID is required and cannot be empty",
@@ -23,9 +22,12 @@ export async function GET(req : NextRequest,{ params }: { params: Promise<{ form
       );
     }
 
-    const data = await prisma.forms.findUnique({
+    const data = await prisma.forms.findFirst({
       where: {
-        id: formId,
+        OR : [
+          { id: id },
+          { slug: id },
+        ]
       },
     });
     console.log("data coming from db : ",data);
