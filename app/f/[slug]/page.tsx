@@ -154,14 +154,13 @@ export default function PublicFormPage() {
     setIsSubmitting(true);
 
     try {
-      // TODO: Create API endpoint to save form responses
       await axios.post("/api/forms/submit", {
         formId: formData?.id,
         data: formValues,
       });
 
       setSubmitSuccess(true);
-      setFormValues({}); // Reset form
+      setFormValues({});
     } catch (error: any) {
       console.error("Form submission failed:", error);
       setError("Failed to submit form. Please try again.");
