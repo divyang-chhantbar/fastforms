@@ -5,35 +5,37 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   try {
     const { userId } = await auth();
-    
+
     if (!userId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    
+
     // Fetch user's forms with response count
     const forms = await prisma.forms.findMany({
       where: { userId: userId },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        createdAt: true,
         _count: {
-          select: { responses: true }
-        }
+          select: { responses: true },
+        },
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: "desc" },
     });
-    
-    return NextResponse.json({
-      success: true,
-      forms: forms
-    }, { status: 200 });
-    
+
+    return NextResponse.json(
+      {
+        success: true,
+        forms: forms,
+      },
+      { status: 200 },
+    );
   } catch (error: any) {
     console.error("Error fetching forms:", error);
     return NextResponse.json(
       { error: "Failed to fetch forms" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
