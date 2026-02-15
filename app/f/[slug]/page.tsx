@@ -23,7 +23,11 @@ interface FormData {
   isPublished: boolean;
 }
 
-function renderField(field: Field, value: any, onChange: (fieldId: string, value: any) => void) {
+function renderField(
+  field: Field,
+  value: any,
+  onChange: (fieldId: string, value: any) => void,
+) {
   switch (field.type) {
     case "text":
     case "email":
@@ -60,7 +64,9 @@ function renderField(field: Field, value: any, onChange: (fieldId: string, value
           onChange={(e) => onChange(field.id, e.target.value)}
           className="w-full border rounded px-3 py-2"
         >
-          <option value="" className="text-gray-700">Select an option</option>
+          <option value="" className="text-gray-700">
+            Select an option
+          </option>
           {field.options?.map((option: string) => (
             <option key={option} value={option} className="text-gray-700">
               {option}
@@ -109,6 +115,18 @@ function renderField(field: Field, value: any, onChange: (fieldId: string, value
             </label>
           ))}
         </div>
+      );
+    case "number":
+      return (
+        <input
+          type="number"
+          name={field.id}
+          placeholder={field.placeholder}
+          required={field.required}
+          value={value || ""}
+          onChange={(e) => onChange(field.id, e.target.value)}
+          className="w-full border rounded px-3 py-2"
+        />
       );
 
     default:
@@ -186,7 +204,9 @@ export default function PublicFormPage() {
       <div className="min-h-screen p-8 max-w-xl mx-auto flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">Thank you!</h2>
-          <p className="text-gray-600">Your response has been submitted successfully.</p>
+          <p className="text-gray-600">
+            Your response has been submitted successfully.
+          </p>
         </div>
       </div>
     );
