@@ -18,6 +18,7 @@ export default function DashboardPage() {
   const [forms, setForms] = useState<Form[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deletingFormId, setDeletingFormId] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -40,6 +41,32 @@ export default function DashboardPage() {
     };
     fetchForms();
   }, []);
+
+  const handleDelete = async (formId: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent navigating to responses page
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this form? This action cannot be undone.",
+      )
+    ) {
+      return;
+    }
+    setDeletingFormId(formId);
+    try {
+      const response = await axios.delete(`/api/forms/${formId}`);
+      if (response.data.success) {
+        setForms((prevForms) => prevForms.filter((form) => form.id !== formId));
+      } else {
+        alert(
+          "Failed to delete form: " + (response.data.error || "Unknown error"),
+        );
+      }
+    } catch (error) {
+      alert("An error occurred while deleting the form.");
+    } finally {
+      setDeletingFormId(null);
+    }
+  };
 
   if (isLoading) {
     return <div className="p-8">Loading...</div>;
@@ -68,6 +95,13 @@ export default function DashboardPage() {
                 {form._count.responses} responses • Created{" "}
                 {new Date(form.createdAt).toLocaleDateString()}
               </p>
+              <button
+                onClick={(e) => handleDelete(form.id, e)}
+                disabled={deletingFormId === form.id}
+                className="mt-2 text-sm text-red-500 hover:underline"
+              >
+                {deletingFormId === form.id ? "Deleting..." : "Delete"}
+              </button>
             </div>
           ))}
         </div>
