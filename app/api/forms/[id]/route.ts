@@ -105,3 +105,49 @@ export async function DELETE(
     );
   }
 }
+
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const { id } = await params;
+    if (!id || id.trim().length === 0) {
+      return NextResponse.json(
+        { error: "Form ID is required and cannot be empty" },
+        { status: 400 },
+      );
+    }
+    const form = await prisma.forms.findUnique({
+      where: {
+        id: id,
+      },
+      select: { userId: true, isPublished: true },
+    });
+    if (!form) {
+      return NextResponse.json({ error: "Form not found" }, { status: 404 });
+    }
+    if (form.userId !== userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const updatedForm = await prisma.forms.update({
+      where: { id: id },
+      data: { isPublished: !form.isPublished },
+    });
+    return NextResponse.json(
+      { success: true, data: updatedForm },
+      { status: 200 },
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: "Internal server error",
+      },
+      { status: 500 },
+    );
+  }
+}
