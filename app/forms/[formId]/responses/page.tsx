@@ -19,6 +19,7 @@ export default function ResponsesPage() {
   const [responses, setResponses] = useState<Response[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
   useEffect(() => {
     const fetchResponses = async () => {
       try {
@@ -43,6 +44,23 @@ export default function ResponsesPage() {
     };
     fetchResponses();
   }, [formId]);
+  const handleExport = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`/api/forms/${formId}/export`);
+      // Create a blob from the response data
+      const blob = new Blob([response.data], { type: "text/csv" });
+      const url = window.URL.createObjectURL(blob);
+
+      // create a link
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${formTitle}-responses.csv`;
+
+      link.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {}
+  };
   if (isLoading) {
     return <div className="p-8">Loading...</div>;
   }
@@ -73,7 +91,13 @@ export default function ResponsesPage() {
       <p className="text-gray-600 mb-6">
         {responses.length} {responses.length === 1 ? "response" : "responses"}
       </p>
-
+      <button
+        className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+        onClick={handleExport}
+        disabled={isExporting}
+      >
+        {isExporting ? "Exporting..." : "Export"}
+      </button>
       <div className="space-y-6">
         {responses.map((response) => (
           <div key={response.id} className="border rounded-lg p-6 shadow-sm">
