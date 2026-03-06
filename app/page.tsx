@@ -60,6 +60,12 @@ export default function Home() {
           <Link href="#faq" className="hover:text-white transition-colors">
             FAQ
           </Link>
+          <Link
+            href="https://divyang-chhantbar-fastforms-2.mintlify.app/"
+            className="hover:text-white transition-colors"
+          >
+            Docs
+          </Link>
         </div>
 
         <div className="flex items-center gap-6 text-[13px] font-medium">
