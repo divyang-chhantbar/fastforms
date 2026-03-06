@@ -24,3 +24,28 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes liquid-orb-bottom {
+  0% {
+    border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+  }
+  33% {
+    border-radius: 55% 45% 60% 40% / 50% 55% 45% 50%;
+  }
+  66% {
+    border-radius: 45% 55% 40% 60% / 55% 45% 50% 45%;
+  }
+  100% {
+    border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+  }
+}
+
+.animate-liquid-orb-bottom {
+  animation: liquid-orb-bottom 12s ease-in-out infinite alternate;
+}
+
+@layer utilities {
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+}
