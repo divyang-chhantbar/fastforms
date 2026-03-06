@@ -31,7 +31,7 @@ export async function GET(
         OR: [{ id: id }, { slug: id }],
       },
     });
-    console.log("data coming from db : ", data);
+    // console.log("data coming from db : ", data);
 
     if (!data) {
       return NextResponse.json({ error: "Form not found" }, { status: 404 });

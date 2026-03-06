@@ -50,7 +50,7 @@ export async function GET(
         createdAt: true,
       },
     });
-    console.log("Fetched responses:", responses);
+    // console.log("Fetched responses:", responses);
     return NextResponse.json(
       {
         success: true,

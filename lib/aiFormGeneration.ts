@@ -46,7 +46,7 @@ export const generateFormSchema = async (userPrompt: string) => {
             response_format : {type : 'json_object'}
         })
         const content = completion.choices[0].message.content;
-        console.log("Groq API response content : ",content);
+        // console.log("Groq API response content : ",content);
         if (!content) {
             throw new Error("No content received from API");
         }

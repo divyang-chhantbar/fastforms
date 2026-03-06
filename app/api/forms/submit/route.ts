@@ -5,8 +5,8 @@ export async function POST(req: NextRequest) {
   try {
     const { formId, data } = await req.json();
 
-    console.log("formId:", formId);
-    console.log("data:", data);
+    // console.log("formId:", formId);
+    // console.log("data:", data);
 
     if (!formId || formId.trim().length === 0) {
       return NextResponse.json(
