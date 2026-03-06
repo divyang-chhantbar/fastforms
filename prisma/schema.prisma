@@ -23,9 +23,9 @@ model Forms {
 model FormsResponses {
   id        String   @id @default(cuid())
   formId    String
-  form      Forms    @relation(fields: [formId], references: [id], onDelete: Cascade)
   data      Json
   createdAt DateTime @default(now())
+  form      Forms    @relation(fields: [formId], references: [id], onDelete: Cascade)
 
   @@index([formId])
 }
