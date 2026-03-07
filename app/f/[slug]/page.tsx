@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { CheckCircle2, AlertCircle } from "lucide-react";
-import Link from "next/link";
+import { CldUploadWidget } from "next-cloudinary";
 
 interface Field {
   id: string;
@@ -148,6 +148,140 @@ function renderField(
           onChange={(e) => onChange(field.id, e.target.value)}
           className={commonClasses}
         />
+      );
+
+    case "date":
+      return (
+        <input
+          type="date"
+          name={field.id}
+          placeholder={field.placeholder}
+          required={field.required}
+          value={value || ""}
+          onChange={(e) => onChange(field.id, e.target.value)}
+          className={commonClasses}
+        />
+      );
+
+    case "file":
+      return (
+        <CldUploadWidget
+          uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+          options={{
+            maxFiles: 1,
+            multiple: false, // Prevents selecting multiple files at once
+            resourceType: "auto",
+            clientAllowedFormats: ["png", "jpeg", "jpg", "pdf", "doc", "docx"],
+            theme: "minimal", // This removes the weird sidebars and makes it a sleek popup
+            styles: {
+              palette: {
+                window: "#09090b", // Your dark background
+                windowBorder: "#ffffff1a", // Subtle white border
+                tabIcon: "#a855f7",
+                menuIcons: "#ffffff",
+                textDark: "#ffffff", // Forces text inside to use white
+                textLight: "#ffffff",
+                link: "#a855f7",
+                action: "#4f46e5", // Indigo action buttons
+                inactiveTabIcon: "#71717a",
+                error: "#ef4444",
+                inProgress: "#4f46e5",
+                complete: "#22c55e",
+                sourceBg: "#18181b", // Slightly lighter internal zone
+              },
+            },
+          }}
+          onSuccess={(result: any) => {
+            if (result.info?.secure_url) {
+              onChange(field.id, result.info.secure_url);
+            }
+          }}
+        >
+          {({ open }) => (
+            <div className="flex flex-col gap-2 mt-2">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  open();
+                }}
+                className={`w-full group flex flex-col items-center justify-center gap-3 p-8 border-2 border-dashed rounded-2xl transition-all duration-300 ${
+                  value
+                    ? "bg-emerald-500/5 border-emerald-500/30"
+                    : "bg-white/[0.02] border-white/10 hover:bg-indigo-500/5 hover:border-indigo-500/30"
+                }`}
+              >
+                {value ? (
+                  <>
+                    <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                      <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm font-medium text-emerald-400">
+                        File attached successfully
+                      </p>
+                      <p className="text-xs text-zinc-500 mt-1">
+                        Click to upload a different file
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-12 h-12 rounded-full bg-white/[0.05] group-hover:bg-indigo-500/20 flex items-center justify-center transition-colors">
+                      <svg
+                        className="w-6 h-6 text-zinc-400 group-hover:text-indigo-400 transition-colors"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        />
+                      </svg>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm font-medium text-zinc-300 group-hover:text-indigo-300 transition-colors">
+                        Click to upload a file
+                      </p>
+                      <p className="text-xs text-zinc-500 mt-1">
+                        PDF, DOC, JPG, or PNG
+                      </p>
+                    </div>
+                  </>
+                )}
+              </button>
+
+              {value && (
+                <div className="flex justify-end mt-1">
+                  <a
+                    href={value}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1"
+                  >
+                    View uploaded file
+                    <svg
+                      className="w-3 h-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      />
+                    </svg>
+                  </a>
+                </div>
+              )}
+            </div>
+          )}
+        </CldUploadWidget>
       );
 
     default:

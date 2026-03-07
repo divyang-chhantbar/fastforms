@@ -130,6 +130,30 @@ function renderField(field: Field) {
         />
       );
 
+    case "date":
+      return (
+        <input
+          type="date"
+          name={field.id}
+          placeholder={field.placeholder}
+          required={field.required}
+          disabled
+          className={commonClasses}
+        />
+      );
+
+    case "file":
+      return (
+        <input
+          type="file"
+          name={field.id}
+          placeholder={field.placeholder}
+          required={field.required}
+          disabled
+          className={commonClasses}
+        />
+      );
+
     default:
       return (
         <div className="text-zinc-500 text-sm italic">
