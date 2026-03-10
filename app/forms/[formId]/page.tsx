@@ -262,13 +262,20 @@ export default function FormGenerationPage() {
 
       <div className="w-full max-w-2xl relative z-10">
         {/* Navigation / Back */}
-        <div className="mb-8">
+        <div className="mb-8 flex items-center justify-between">
           <Link
             href="/generate"
             className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
             Back to Generator
+          </Link>
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            Dashboard
           </Link>
         </div>
 
