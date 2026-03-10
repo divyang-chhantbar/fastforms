@@ -405,16 +405,16 @@ export default function Home() {
               a: "Forms are generated in milliseconds. Our AI model immediately drafts the schema and renders the UI natively.",
             },
             {
-              q: "Can I embed these forms on my existing website?",
-              a: "Yes. Every generated form comes with an embed code perfectly tailored to drop straight into your React, Next.js, or HTML site.",
-            },
-            {
               q: "Is the data fully secure?",
               a: "Absolutely. We employ enterprise-grade encryption at rest and in transit, ensuring fully compliant data collection.",
             },
             {
-              q: "Can I customize the generated design?",
-              a: "Yes, once the AI generates your form, you have full control over styling, fields, and validation logic through our visual editor.",
+              q: "How does the AI understand my requirements?",
+              a: "We use advanced large language models trained specifically on web patterns to translate your natural language descriptions into functional, validated form structures.",
+            },
+            {
+              q: "Can I export the responses?",
+              a: "Yes, you can export the responses in CSV format",
             },
           ].map((faq, i) => (
             <div
