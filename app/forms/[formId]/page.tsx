@@ -13,12 +13,25 @@ import {
 import Link from "next/link";
 import React from "react";
 import { SmartForm } from "@/components/SmartForm";
-import { useTambo, useTamboThreadInput, TamboThreadInputProvider } from "@tambo-ai/react";
+import {
+  useTambo,
+  useTamboThreadInput,
+  TamboThreadInputProvider,
+} from "@tambo-ai/react";
 import { FormAssistant } from "@/components/FormAssistant";
 
 interface Field {
   id: string;
-  type: "text" | "email" | "date" | "number" | "textarea" | "select" | "radio" | "checkbox" | "file";
+  type:
+    | "text"
+    | "email"
+    | "date"
+    | "number"
+    | "textarea"
+    | "select"
+    | "radio"
+    | "checkbox"
+    | "file";
   label: string;
   required: boolean;
   placeholder: string;
@@ -206,7 +219,9 @@ export default function FormGenerationPage() {
   const handlePublishToggle = async () => {
     setIsToggling(true);
     try {
-      const response = await axios.patch(`/api/forms/${formId}`, { togglePublish: true });
+      const response = await axios.patch(`/api/forms/${formId}`, {
+        togglePublish: true,
+      });
       const updatedForm = response.data.data;
       setFormData(updatedForm);
 
@@ -226,17 +241,20 @@ export default function FormGenerationPage() {
     }
   };
 
-  const handleAiUpdate = React.useCallback(async (newProps: any) => {
-    try {
-      const response = await axios.patch(`/api/forms/${formId}`, {
-        title: newProps.title,
-        fields: newProps.fields
-      });
-      console.log("✅ AI Changes Synced to Database:", response.data.data);
-    } catch (err: any) {
-      console.error("AI Sync failed:", err.response?.data || err.message);
-    }
-  }, [formId]);
+  const handleAiUpdate = React.useCallback(
+    async (newProps: any) => {
+      try {
+        const response = await axios.patch(`/api/forms/${formId}`, {
+          title: newProps.title,
+          fields: newProps.fields,
+        });
+        console.log("✅ AI Changes Synced to Database:", response.data.data);
+      } catch (err: any) {
+        console.error("AI Sync failed:", err.response?.data || err.message);
+      }
+    },
+    [formId],
+  );
 
   if (isLoading) {
     return (
@@ -321,9 +339,9 @@ export default function FormGenerationPage() {
         </div>
 
         {/* Smart Form Container (The Living Editor) */}
-        <SmartForm 
-          title={formData.title} 
-          fields={formData.fields} 
+        <SmartForm
+          title={formData.title}
+          fields={formData.fields}
           onUpdate={handleAiUpdate}
         />
         {/* AI Editor Assistant (The "Cafe" Vibe Chat) */}
@@ -331,13 +349,17 @@ export default function FormGenerationPage() {
           <div className="px-8 py-4 border-b border-indigo-500/10 bg-indigo-500/10 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
-              <span className="text-xs font-semibold tracking-widest text-indigo-300 uppercase">AI Form Assistant</span>
+              <span className="text-xs font-semibold tracking-widest text-indigo-300 uppercase">
+                AI Form Assistant
+              </span>
             </div>
-            <span className="text-[10px] text-indigo-400/60 font-mono italic">Powered by Tambo</span>
+            <span className="text-[10px] text-indigo-400/60 font-mono italic">
+              Powered by Tambo
+            </span>
           </div>
           <div className="h-[450px]">
             <TamboThreadInputProvider>
-               <FormAssistant />
+              <FormAssistant />
             </TamboThreadInputProvider>
           </div>
         </div>

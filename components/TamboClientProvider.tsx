@@ -8,7 +8,8 @@ export function TamboClientProvider({ children }: { children: React.ReactNode })
   
   return (
     <TamboProvider 
-      apiKey={process.env.NEXT_PUBLIC_TAMBO_API_KEY || ""}
+      apiKey="proxy-managed" // Placeholder, proxy adds the real one
+      tamboUrl="/api/tambo" // Points to our local proxy
       userKey={user?.id}
     >
       {children}
