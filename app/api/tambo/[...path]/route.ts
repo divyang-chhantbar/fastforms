@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-const TAMBO_API_BASE = "https://api.tambo.co/v1";
+const TAMBO_API_BASE = "https://api.tambo.co";
 
 /**
  * Proxy handler to keep Tambo API Key safe on the server
