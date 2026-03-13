@@ -14,7 +14,7 @@ import {
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen bg-[#09090b] text-zinc-50 overflow-hidden font-sans selection:bg-purple-500/30 w-full flex flex-col items-center">
+    <div className="relative min-h-screen bg-[#09090b] text-zinc-50 overflow-hidden font-sans selection:bg-purple-500/30 w-full flex flex-col items-center scrollbar-hide">
       {/* Navbar */}
       <nav className="relative z-20 flex items-center justify-between px-8 py-8 w-full max-w-[1400px] mx-auto">
         <div className="flex items-center gap-2.5 text-xl font-medium tracking-tight text-white">

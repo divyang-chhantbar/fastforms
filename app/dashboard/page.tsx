@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
 import {
   LayoutDashboard,
   PlusCircle,
@@ -29,6 +29,7 @@ export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deletingFormId, setDeletingFormId] = useState<string | null>(null);
+  const { user } = useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -78,7 +79,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-zinc-50 font-sans flex overflow-hidden selection:bg-purple-500/30">
+    <div className="min-h-screen bg-[#09090b] text-zinc-50 font-sans flex overflow-hidden selection:bg-purple-500/30 scrollbar-hide">
       {/* Sidebar Navigation */}
       <aside className="w-64 border-r border-white/[0.05] bg-black/40 backdrop-blur-xl flex flex-col justify-between hidden md:flex">
         <div>
@@ -147,8 +148,8 @@ export default function DashboardPage() {
               }}
             />
             <div className="flex-1 flex flex-col justify-center">
-              <span className="text-sm font-medium text-white leading-none">
-                Account
+              <span className="text-sm font-medium text-white leading-none max-w-[120px] truncate">
+                {user?.primaryEmailAddress?.emailAddress || "Account"}
               </span>
               <span className="text-xs text-zinc-500 mt-1">Manage profile</span>
             </div>
@@ -158,7 +159,7 @@ export default function DashboardPage() {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 relative overflow-y-auto w-full">
+      <main className="flex-1 relative overflow-y-auto w-full scrollbar-hide">
         {/* Background Ambient Glow */}
         <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-indigo-500/10 blur-[150px] rounded-full pointer-events-none -z-10" />
 

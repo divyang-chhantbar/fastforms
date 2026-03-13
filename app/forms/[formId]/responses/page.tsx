@@ -108,7 +108,7 @@ export default function ResponsesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-zinc-50 font-sans selection:bg-purple-500/30 relative py-12 px-6 overflow-hidden">
+    <div className="min-h-screen bg-[#09090b] text-zinc-50 font-sans selection:bg-purple-500/30 relative py-12 px-6 overflow-hidden scrollbar-hide">
       {/* Background Radiance */}
       <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-indigo-500/10 blur-[150px] rounded-full pointer-events-none -z-10" />
 
