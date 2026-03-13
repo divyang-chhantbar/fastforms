@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
+import { validateFormSchema } from "@/lib/validations";
 
 /*
     get the formId from the params
@@ -106,6 +107,12 @@ export async function DELETE(
   }
 }
 
+
+/*
+    Here its a request where we will update our form structure 
+    As we will be using TamboUI for updating the fields or titles , we need 
+    to validate the form structure .
+*/
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -115,6 +122,7 @@ export async function PATCH(
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
     const { id } = await params;
     if (!id || id.trim().length === 0) {
       return NextResponse.json(
@@ -122,31 +130,69 @@ export async function PATCH(
         { status: 400 },
       );
     }
-    const form = await prisma.forms.findUnique({
-      where: {
-        id: id,
-      },
-      select: { userId: true, isPublished: true },
+
+    const body = await req.json().catch(() => ({}));
+    const { title, fields, isPublished } = body;
+
+    // 1. Check if form exists and user owns it
+    const existingForm = await prisma.forms.findUnique({
+      where: { id: id },
+      select: { userId: true, isPublished: true, title: true, fields: true },
     });
-    if (!form) {
+
+    if (!existingForm) {
       return NextResponse.json({ error: "Form not found" }, { status: 404 });
     }
-    if (form.userId !== userId) {
+
+    if (existingForm.userId !== userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    const updateData: any = {};
+
+    if (isPublished !== undefined) {
+      updateData.isPublished = isPublished;
+    } else if (body.togglePublish) {
+      // Keep support for the original toggle behavior just in case
+      updateData.isPublished = !existingForm.isPublished;
+    }
+
+    if (title !== undefined) {
+      updateData.title = title;
+    }
+
+    if (fields !== undefined) {
+      // VALIDATION: Ensure the new fields meet our schema requirements
+      try {
+        console.log("Validating updated fields:", JSON.stringify(fields, null, 2));
+        validateFormSchema({
+          title: title || existingForm.title,
+          fields: fields,
+        });
+        updateData.fields = fields;
+      } catch (error: any) {
+        console.error("Zod Validation Error:", error.errors);
+        return NextResponse.json(
+          { error: "Invalid form structure", details: error.errors },
+          { status: 400 },
+        );
+      }
+    }
+
+    // 3. Execute Update
     const updatedForm = await prisma.forms.update({
       where: { id: id },
-      data: { isPublished: !form.isPublished },
+      data: updateData,
     });
+
     return NextResponse.json(
       { success: true, data: updatedForm },
       { status: 200 },
     );
   } catch (error) {
+    console.error("PATCH Error:", error);
     return NextResponse.json(
-      {
-        error: "Internal server error",
-      },
+      { error: "Internal server error" },
       { status: 500 },
     );
   }
