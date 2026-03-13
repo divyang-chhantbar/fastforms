@@ -90,7 +90,7 @@ export function FormAssistant() {
               }
             }}
             placeholder="E.g. 'Add a phone number field after email'"
-            className="w-full bg-white/5 border border-white/10 rounded-xl pl-4 pr-12 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:text-zinc-600 resize-none min-h-[46px] max-h-[150px]"
+            className="w-full bg-white/5 border border-white/10 rounded-xl pl-4 pr-12 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:text-zinc-600 resize-none min-h-[46px] max-h-[150px] scrollbar-hide"
             rows={1}
           />
           <button

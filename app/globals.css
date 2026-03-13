@@ -48,4 +48,11 @@ body {
   .animation-delay-2000 {
     animation-delay: 2s;
   }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
