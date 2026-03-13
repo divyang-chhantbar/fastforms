@@ -11,6 +11,8 @@
   "dependencies": {
     "@clerk/nextjs": "^6.37.1",
     "@prisma/client": "^6.19.2",
+    "@tambo-ai/client": "^1.0.2",
+    "@tambo-ai/react": "^1.2.1",
     "@vercel/analytics": "^2.0.0",
     "axios": "^1.13.5",
     "canvas-confetti": "^1.9.4",
