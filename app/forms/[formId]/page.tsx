@@ -11,10 +11,14 @@ import {
   Share2,
 } from "lucide-react";
 import Link from "next/link";
+import React from "react";
+import { SmartForm } from "@/components/SmartForm";
+import { useTambo, useTamboThreadInput, TamboThreadInputProvider } from "@tambo-ai/react";
+import { FormAssistant } from "@/components/FormAssistant";
 
 interface Field {
   id: string;
-  type: string;
+  type: "text" | "email" | "date" | "number" | "textarea" | "select" | "radio" | "checkbox" | "file";
   label: string;
   required: boolean;
   placeholder: string;
@@ -202,7 +206,7 @@ export default function FormGenerationPage() {
   const handlePublishToggle = async () => {
     setIsToggling(true);
     try {
-      const response = await axios.patch(`/api/forms/${formId}`);
+      const response = await axios.patch(`/api/forms/${formId}`, { togglePublish: true });
       const updatedForm = response.data.data;
       setFormData(updatedForm);
 
@@ -221,6 +225,18 @@ export default function FormGenerationPage() {
       setIsToggling(false);
     }
   };
+
+  const handleAiUpdate = React.useCallback(async (newProps: any) => {
+    try {
+      const response = await axios.patch(`/api/forms/${formId}`, {
+        title: newProps.title,
+        fields: newProps.fields
+      });
+      console.log("✅ AI Changes Synced to Database:", response.data.data);
+    } catch (err: any) {
+      console.error("AI Sync failed:", err.response?.data || err.message);
+    }
+  }, [formId]);
 
   if (isLoading) {
     return (
@@ -304,28 +320,26 @@ export default function FormGenerationPage() {
           </div>
         </div>
 
-        {/* Form Container Card */}
-        <div className="rounded-[2rem] bg-black/40 border border-white/[0.08] backdrop-blur-xl p-8 sm:p-12 shadow-2xl relative overflow-hidden">
-          {/* Subtle Top Inner Highlight */}
-          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/[0.15] to-transparent" />
-
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight mb-10 text-center">
-            {formData.title}
-          </h1>
-
-          <form className="space-y-8">
-            {formData.fields.map((field: Field) => (
-              <div key={field.id} className="space-y-2 group">
-                <label className="block text-sm font-medium text-zinc-300 tracking-wide">
-                  {field.label}
-                  {field.required && (
-                    <span className="text-indigo-400 ml-1">*</span>
-                  )}
-                </label>
-                {renderField(field)}
-              </div>
-            ))}
-          </form>
+        {/* Smart Form Container (The Living Editor) */}
+        <SmartForm 
+          title={formData.title} 
+          fields={formData.fields} 
+          onUpdate={handleAiUpdate}
+        />
+        {/* AI Editor Assistant (The "Cafe" Vibe Chat) */}
+        <div className="mt-8 rounded-[2.5rem] bg-indigo-500/5 border border-indigo-500/10 overflow-hidden shadow-2xl backdrop-blur-xl">
+          <div className="px-8 py-4 border-b border-indigo-500/10 bg-indigo-500/10 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
+              <span className="text-xs font-semibold tracking-widest text-indigo-300 uppercase">AI Form Assistant</span>
+            </div>
+            <span className="text-[10px] text-indigo-400/60 font-mono italic">Powered by Tambo</span>
+          </div>
+          <div className="h-[450px]">
+            <TamboThreadInputProvider>
+               <FormAssistant />
+            </TamboThreadInputProvider>
+          </div>
         </div>
 
         {/* Publishing / Share Actions Card */}
