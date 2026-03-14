@@ -86,7 +86,7 @@ export default function Home() {
           <SignedIn>
             <Link
               href="/dashboard"
-              className="hidden sm:block text-zinc-300 hover:text-white transition-colors mr-2"
+              className="text-sm font-medium text-zinc-300 hover:text-white transition-colors mr-2"
             >
               Dashboard
             </Link>

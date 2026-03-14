@@ -159,7 +159,7 @@ export default function DashboardPage() {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 relative overflow-y-auto w-full scrollbar-hide">
+      <main className="flex-1 relative overflow-y-auto w-full scrollbar-hide pb-20 md:pb-0">
         {/* Background Ambient Glow */}
         <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-indigo-500/10 blur-[150px] rounded-full pointer-events-none -z-10" />
 
@@ -264,6 +264,42 @@ export default function DashboardPage() {
           )}
         </div>
       </main>
+
+      {/* Mobile Navigation */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-2xl border-t border-white/[0.1] flex items-center justify-around p-4 z-50">
+        <Link
+          href="/dashboard"
+          className="flex flex-col items-center gap-1.5 text-indigo-400"
+        >
+          <LayoutDashboard className="w-5 h-5" />
+          <span className="text-[10px] font-medium tracking-wide">
+            Dashboard
+          </span>
+        </Link>
+        <Link
+          href="/generate"
+          className="flex flex-col items-center gap-1.5 text-zinc-400 hover:text-white transition-colors"
+        >
+          <div className="bg-indigo-500/20 p-2 rounded-full border border-indigo-500/30 text-indigo-300">
+            <PlusCircle className="w-5 h-5" />
+          </div>
+          <span className="text-[10px] font-medium tracking-wide">Create</span>
+        </Link>
+        <div className="flex flex-col items-center gap-1.5">
+          <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center overflow-hidden border border-white/20">
+            <UserButton
+              appearance={{
+                elements: {
+                  userButtonAvatarBox: "w-full h-full",
+                },
+              }}
+            />
+          </div>
+          <span className="text-[10px] font-medium tracking-wide text-zinc-400">
+            Account
+          </span>
+        </div>
+      </nav>
     </div>
   );
 }

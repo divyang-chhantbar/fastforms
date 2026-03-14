@@ -62,7 +62,7 @@ export default function AiPrompt() {
         <div className="flex items-center gap-6">
           <Link
             href="/dashboard"
-            className="hidden sm:block text-sm font-medium text-zinc-300 hover:text-white transition-colors"
+            className="text-sm font-medium text-zinc-300 hover:text-white transition-colors"
           >
             Dashboard
           </Link>
