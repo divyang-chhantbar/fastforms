@@ -111,6 +111,14 @@ export default function AiPrompt() {
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    if (prompt.trim()) {
+                      handleGenerate();
+                    }
+                  }
+                }}
                 placeholder="E.g. 'Create a beautiful multi-step onboarding form for a real estate agency with name, email, budget, and location preferences...'"
                 className="w-full h-40 sm:h-48 p-5 bg-transparent text-white placeholder:text-zinc-600 outline-none resize-none font-light text-lg sm:text-xl leading-relaxed"
               />
